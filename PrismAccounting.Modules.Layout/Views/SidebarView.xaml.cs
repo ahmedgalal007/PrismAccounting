@@ -1,6 +1,4 @@
-﻿using PrismAccounting.Core;
-using PrismAccounting.Core.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,15 +15,12 @@ using System.Windows.Shapes;
 
 namespace PrismAccounting.Modules.Layout.Views;
 /// <summary>
-/// Interaction logic for ViewA.xaml
+/// Interaction logic for SidebarView.xaml
 /// </summary>
-public partial class LayoutView : UserControl
+public partial class SidebarView : UserControl
 {
-  private ILayoutManager _layoutManager;
-  public LayoutView(ILayoutManager layoutManager)
+  public SidebarView()
   {
     InitializeComponent();
-    // _layoutManager.Bind(Main);
-
   }
 }

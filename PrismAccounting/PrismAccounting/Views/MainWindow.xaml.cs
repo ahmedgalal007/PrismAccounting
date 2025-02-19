@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using PrismAccounting.Core.Interfaces;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace PrismAccounting.Views;
 /// <summary>
@@ -6,8 +8,9 @@ namespace PrismAccounting.Views;
 /// </summary>
 public partial class MainWindow : Window
 {
-  public MainWindow()
+  public MainWindow(ILayoutManager layoutManager)
   {
     InitializeComponent();
+    layoutManager.Bind(LayoutGrid);
   }
 }

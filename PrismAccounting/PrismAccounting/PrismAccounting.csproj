@@ -10,7 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\PrismAccounting.Modules.Layout\PrismAccounting.Modules.Layout.csproj" />
     <ProjectReference Include="..\PrismAccounting.Core\PrismAccounting.Core.csproj" />
-    <ProjectReference Include="..\Modules\PrismAccounting.Modules.ModuleName\PrismAccounting.Modules.ModuleName.csproj" />
     <ProjectReference Include="..\Services\PrismAccounting.Services.Interfaces\PrismAccounting.Services.Interfaces.csproj" />
     <ProjectReference Include="..\Services\PrismAccounting.Services\PrismAccounting.Services.csproj" />
   </ItemGroup>
