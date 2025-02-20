@@ -1,5 +1,6 @@
 ﻿using Prism.Regions;
 using PrismAccounting.Core.Interfaces;
+using PrismAccounting.Core.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace PrismAccounting.Core;
-public class LayoutManager: INotifyPropertyChanged, ILayoutManager
+public class LayoutManager : INotifyPropertyChanged, ILayoutManager
 {
   private readonly IRegionManager _regionManager;
 
@@ -25,7 +26,7 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
   }
 
   #region Properities
-  public Grid LayoutGrid { get; set; }
+  public Grid LayoutGrid;
   public string LayoutName { get; set; }
   public GridLength Width { get; set; }
   public GridLength Height { get; set; }
@@ -34,18 +35,30 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
   #endregion
 
 
-  #region Actions
-  public void AddLayoutRegion(UserControl view, LayoutRegion region)
+  #region Public Actions
+  public ref Grid GetGrid
+  {
+    get
+    {
+      return ref LayoutGrid;
+    }
+  }
+
+  public void AddLayoutRegion<T>(LayoutRegion region) where T : UserControl, new()
   {
     LayoutRegions[region.NameProperty] = region;
-    AddregionToLayoutGrid(view,region);
+    AddregionToLayoutGrid<T>(region);
     OnPropertyChanged("AddLayoutRegion");
   }
-  private void AddregionToLayoutGrid(UserControl view, LayoutRegion region)
+  private void AddregionToLayoutGrid<T>(LayoutRegion region) where T : UserControl, new()
   {
-    AddregionToLayoutGrid(this._regionManager, this.LayoutGrid,view, region);
+    AddregionToLayoutGrid<T>(this._regionManager, this.LayoutGrid, region);
   }
-  public void Bind(Grid grid)
+  public LayoutRegion GetRegionByName(string name)
+  {
+    return LayoutRegions[name];
+  }
+  public void SetContainer(Grid grid)
   {
     LayoutGrid = grid;
   }
@@ -63,7 +76,6 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
   //public LayoutRegion TopMenu { get; set; } // , TopToolbar, Sidebar, HorizontalDrawer, VerticalDrawer
 
   public event PropertyChangedEventHandler PropertyChanged;
-
   private void OnPropertyChanged(string info)
   {
     PropertyChangedEventHandler handler = PropertyChanged;
@@ -73,28 +85,18 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
     }
   }
 
-  
-  #region Static Functions
-  private static void SetBinding(FrameworkElement target, DependencyProperty property, object source, string sourcePropertyName)
-  {
-    Binding myBinding = new Binding(sourcePropertyName);
-    myBinding.Source = source;
-    // Bind the new data source to the myText TextBlock control's Text dependency property.
-    target.SetBinding(property, myBinding);
-  }
 
-  public static void AddregionToLayoutGrid(IRegionManager regionManager, Grid grid, UserControl view, LayoutRegion region)
+  #region Static Functions
+  
+  
+  public static void AddregionToLayoutGrid<T>(IRegionManager regionManager, Grid grid, LayoutRegion region) where T : UserControl , new() 
   {
     // 1- Create and bind Panel to Region data
-    var panel = new StackPanel
-    {
-      Name = region.NameProperty,
-      // Width = new Binding($"LayoutRegions[{region.NameProperty}].Width"),
-    };
-
-    SetBinding(panel, StackPanel.WidthProperty, region, nameof(region.WidthProperty));
-    SetBinding(panel, StackPanel.HeightProperty, region, nameof(region.HeightProperty));
+    var panel = new StackPanel();
+    UIUtilities.SetBinding(panel, StackPanel.WidthProperty, region, nameof(region.WidthProperty));
+    UIUtilities.SetBinding(panel, StackPanel.HeightProperty, region, nameof(region.HeightProperty));
     //panel.SetBinding(panel.Width ,new Binding($"LayoutRegions[{region.NameProperty}].Width");
+    // UIUtilities.SetBindingAttached(panel, Grid.ColumnProperty, panel, region.GridColumnProperty);
     Grid.SetColumn(panel, region.GridColumnProperty);
     Grid.SetRow(panel, region.GridRowProperty);
     Grid.SetColumnSpan(panel, region.GridColSpansProperty);
@@ -102,46 +104,11 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
     grid.Children.Add(panel);
     ContentControl contentControl = new ContentControl();
     panel.Children.Add(contentControl);
-    // 2- Create The ContentControl  
 
-    // 3- Create Region and it To RegionManager
-    /*
-    regionManager.Regions.Add(region.NameProperty,new Region());
-    IRegion newRegion = regionManager.Regions[region.NameProperty];
-
-    newRegion.Add(view);
-    newRegion.Activate(view);
-    */
-    // regionManager.RegisterViewWithRegion(region.NameProperty, view.GetType().Name);
-    // IRegion rgn = regionManager.Regions[region.NameProperty];
-    // rgn.Add(view);
-    // rgn.Activate(view);
-
-
-    // InboxView view = this.container.Resolve<InboxView>();
-    // regionManager.AddToRegion(region.NameProperty, view);
-    /*
-    Binding myBinding = new Binding("ActiveViews");
-    myBinding.Source = newRegion;
-    // DependencyProperty RegionNameProperty = DependencyProperty.RegisterAttached("prism:RegionManager.RegionName", typeof(string), typeof(ContentControl), new PropertyMetadata(null));
-    DependencyProperty RegionNameProperty = DependencyProperty.RegisterAttached("prism:RegionManager.RegionName", typeof(string), typeof(ContentControl), new PropertyMetadata());
-    // DependencyProperty RegionNameProperty = DependencyProperty.Register("prism:RegionManager.RegionName", typeof(string), typeof(ContentControl));
-    // DependencyProperty RegionNameProperty = DependencyProperty.Register("RegionName", typeof(string), typeof(ContentControl));
-    contentControl.SetValue(RegionNameProperty, region.NameProperty);
-
-    contentControl.SetBinding(ContentControl.ContentProperty, myBinding);
-    // regionManager.RequestNavigate(region.NameProperty, view.GetType().Name);
-    */
     RegionManager.SetRegionName(contentControl, region.NameProperty);
-    regionManager.RegisterViewWithRegion(region.NameProperty, view.GetType().Name);
-    // Prism.Regions.RegionManager.RegionNameProperty
-    // panel.RegisterName(region.NameProperty, newRegion);
-
-    // newRegion.Activate(view);
-    // regionManager.RequestNavigate(region.NameProperty, view.GetType().Name);
-
-    // newRegion.Activate(view);
+    regionManager.RegisterViewWithRegion(region.NameProperty, typeof(T));
   }
+
   public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
   {
     if (depObj != null)
@@ -161,10 +128,8 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
       }
     }
   }
-
-
   private static T FindChild<T>(DependencyObject parent, string childName)
-   where T : DependencyObject
+     where T : DependencyObject
   {
     // Confirm parent and childName are valid. 
     if (parent == null)
@@ -213,7 +178,7 @@ public class LayoutManager: INotifyPropertyChanged, ILayoutManager
     return foundChild;
   }
 
-  
+
   #endregion
 
 

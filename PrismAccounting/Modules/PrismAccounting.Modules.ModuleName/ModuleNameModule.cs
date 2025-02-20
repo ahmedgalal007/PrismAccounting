@@ -1,7 +1,7 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
-using PrismAccounting.Core;
+using PrismAccounting.Core.Regions;
 using PrismAccounting.Modules.ModuleName.Views;
 
 namespace PrismAccounting.Modules.ModuleName;

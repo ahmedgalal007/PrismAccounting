@@ -1,4 +1,4 @@
-﻿namespace PrismAccounting.Core;
+﻿namespace PrismAccounting.Core.Regions;
 
 public static class RegionNames
 {

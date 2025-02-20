@@ -11,6 +11,6 @@ public partial class MainWindow : Window
   public MainWindow(ILayoutManager layoutManager)
   {
     InitializeComponent();
-    layoutManager.Bind(LayoutGrid);
+    layoutManager.SetContainer(LayoutGrid);
   }
 }
