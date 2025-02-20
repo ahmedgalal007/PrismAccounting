@@ -93,12 +93,14 @@ public class LayoutManager : INotifyPropertyChanged, ILayoutManager
   {
     // 1- Create and bind Panel to Region data
     var panel = new StackPanel();
-    UIUtilities.SetBinding(panel, StackPanel.WidthProperty, region, nameof(region.WidthProperty));
-    UIUtilities.SetBinding(panel, StackPanel.HeightProperty, region, nameof(region.HeightProperty));
+    UIUtilities.SetBinding(panel, StackPanel.WidthProperty, region, nameof(LayoutRegion.WidthProperty));
+    UIUtilities.SetBinding(panel, StackPanel.HeightProperty, region, nameof(LayoutRegion.HeightProperty));
     //panel.SetBinding(panel.Width ,new Binding($"LayoutRegions[{region.NameProperty}].Width");
-    // UIUtilities.SetBindingAttached(panel, Grid.ColumnProperty, panel, region.GridColumnProperty);
-    Grid.SetColumn(panel, region.GridColumnProperty);
-    Grid.SetRow(panel, region.GridRowProperty);
+    UIUtilities.SetBindingAttached(panel, Grid.ColumnProperty, region, LayoutRegion.GridColumnProperty);
+    UIUtilities.SetBindingAttached(panel, Grid.RowProperty, region, LayoutRegion.GridRowProperty);
+    // UIUtilities.SetBinding(panel, Grid.ColumnProperty, region, nameof(LayoutRegion.GridColumnProperty));
+    // Grid.SetColumn(panel, region.GridColumn);
+    // Grid.SetRow(panel, region.GridRow);
     Grid.SetColumnSpan(panel, region.GridColSpansProperty);
     Grid.SetRowSpan(panel, region.GridRowSpansProperty);
     grid.Children.Add(panel);

@@ -21,9 +21,13 @@ public static class UIUtilities
   }
   public static void SetBindingAttached(FrameworkElement target, DependencyProperty targetProperty, DependencyObject source, DependencyProperty sourceProperty)
   {
-    PropertyPath path = new PropertyPath("(0)", new object[] { targetProperty });
-    var binding = new Binding { Path = path };
-
-    BindingOperations.SetBinding(source, sourceProperty, binding);
+    //PropertyPath path = new PropertyPath("(0)", new object[] { targetProperty });
+    //var binding = new Binding { Path = path };
+    var binding = new Binding
+    {
+      Path = new PropertyPath(sourceProperty), // here
+      Source = source
+    };
+    BindingOperations.SetBinding(target, targetProperty, binding);
   }
 }

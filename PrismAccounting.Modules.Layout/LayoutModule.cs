@@ -33,7 +33,7 @@ public class LayoutModule : IModule
     _layoutManager.AddLayoutRegion<FooterView>(new LayoutRegion(RegionNames.BottomDrawerRegion, "100".ToGridLength(), "100*".ToGridLength(), true, 0, 2, 4));
     _regionManager.RequestNavigate(RegionNames.ContentRegion, "LayoutView");
     var sidRegion = _layoutManager.GetRegionByName(RegionNames.SidebarRegion);
-    sidRegion.GridColumnProperty = 0;
+    sidRegion.GridColumn = 1;
     sidRegion.GridColSpansProperty = 1;
     // _regionManager.RequestNavigate(RegionNames.SidebarRegion, "SidebarView");
     //SidebarView view = containerProvider.Resolve<SidebarView>();
