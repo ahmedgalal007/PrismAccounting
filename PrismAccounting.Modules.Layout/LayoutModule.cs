@@ -46,5 +46,7 @@ public class LayoutModule : IModule
   {
     containerRegistry.RegisterForNavigation<LayoutView>();
     containerRegistry.RegisterForNavigation<SidebarView>();
+    containerRegistry.RegisterForNavigation<ToolbarView>();
+    containerRegistry.RegisterForNavigation<MenuView>();
   }
 }

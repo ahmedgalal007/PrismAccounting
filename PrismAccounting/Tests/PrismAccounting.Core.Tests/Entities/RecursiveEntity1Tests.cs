@@ -17,7 +17,6 @@ namespace PrismAccounting.Core.Tests.Entities
     {
       this.mockRepository = new MockRepository(MockBehavior.Strict);
 
-
     }
 
     private RecursiveEntity1 CreateRecursiveEntity1()

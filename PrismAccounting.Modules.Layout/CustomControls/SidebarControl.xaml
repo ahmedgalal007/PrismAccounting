@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="EInvoicing.Clients.WPF.CustomControls.SidebarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EInvoicing.Clients.WPF.CustomControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="530" d:DesignWidth="200">
+    <StackPanel VerticalAlignment="Stretch" >
+        <Grid Height="100" Background="White">
+            <!--<Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
+                        <materialDesign:PackIcon  Foreground="#FF1B3861" Kind="ArrowLeft" Width="25" Height="25"/>
+                    </Button>
+                    <Button x:Name="ButtonOpenMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Click="ButtonOpenMenu_Click">
+                        <materialDesign:PackIcon  Foreground="#FF1B3861" Kind="Menu" Width="25" Height="25"/>
+                    </Button>-->
+        </Grid>
+        <!--<ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF1368BD">-->
+        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White">
+            <ListViewItem  Height="60">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ViewDashboard" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem  Height="60">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Pencil" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Text="Create" VerticalAlignment="Center" Margin="20 10"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem  Height="60">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Ticket" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Text="Tickets" VerticalAlignment="Center" Margin="20 10"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem  Height="60">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Message" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Text="Messages" VerticalAlignment="Center" Margin="20 10"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem  Height="60">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Github" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Text="DitHub" VerticalAlignment="Center" Margin="20 10"/>
+                </StackPanel>
+            </ListViewItem>
+        </ListView>
+    </StackPanel>
+</UserControl>

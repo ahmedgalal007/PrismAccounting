@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PrismAccounting.Core.Entities;
 public abstract class RecursiveEntityBase<TEntity> : RecursiveEntityBase<DefaultId, TEntity>
@@ -39,10 +40,17 @@ public abstract class RecursiveEntityBase<TId, TEntity> : AuditableEntityBase<TI
   public virtual TEntity? Parent { get; set; }
   public virtual List<TEntity>? Children { get; set; }
   public int Level { get; set; } = 0;
+  public Int32 GetLevel => Level;
   public string HierarchicalId { get; set; } = "/";
   public string HierarchicalNames { get; set; } = "/";
   public bool IsRoot { get; set; } = false;
   public bool IsLeaf { get; set; } = false;
+  /// <summary>
+  ///   Gets or sets the index of this node in the
+  ///   collection of children nodes of its parent.
+  /// </summary>
+  /// 
+  public int Index { get; set; }
   #endregion
 
 
@@ -51,11 +59,12 @@ public abstract class RecursiveEntityBase<TId, TEntity> : AuditableEntityBase<TI
   public virtual TEntity AddChild(string name)
   {
     IsLeaf = false;
+    if (Children == null) Children = new();
     var child = Create(name, (TEntity)this);
     child.Level = Level+1;
     child.IsLeaf = true;
     child.IsRoot = false;
-    if (Children == null) Children = new();
+    child.Index = Children.Max(e => e.Index)+1;
     Children.Add(child);
     return child;
   }
@@ -63,32 +72,58 @@ public abstract class RecursiveEntityBase<TId, TEntity> : AuditableEntityBase<TI
   {
     return Parent.AddChild(name);
   }
+  /// <summary>
+  ///   Gets the next sibling of this node (the node
+  ///   immediately next to it in its parent's collection).
+  /// </summary>
+  /// 
+  public TEntity Next
+  {
+    get
+    {
+      if (Parent == null)
+        return null;
+      if (Index + 1 >= Parent.Children.Count)
+        return null;
+      return Parent.Children[Index + 1];
+    }
+  }
+
+  /// <summary>
+  ///   Gets the previous sibling of this node.
+  /// </summary>
+  /// 
+  public TEntity Previous
+  {
+    get
+    {
+      if (Index == 0)
+        return null;
+      return Parent.Children[Index - 1];
+    }
+  }
   // public TEntity GetDirectAncestor(TId n)
-  public TEntity GetDirectAncestor()
+  public TEntity GetAncestor()
   {
     return this.Parent;
   }
 
   // public SortedList<int, TEntity> GetAllAncestor(TId n)
-  public SortedList<int, TEntity> GetAllAncestor()
+  public List<TEntity> GetAllAncestors()
   {
     throw new NotImplementedException();
   }
 
-  public List<TEntity> GetDirectDescendants(TId? child1, TId? child2)
+  public List<TEntity> GetDescendants()
   {
     throw new NotImplementedException();
   }
-  public SortedList<int, TEntity> GetAllDescendant(TId? child1, TId? child2)
+  public List<TEntity> GetAllDescendants()
   {
     SortedList<int, TEntity> DescendantsIds = new SortedList<int, TEntity>();
     throw new NotImplementedException();
   }
 
-  public Int32 GetLevel()
-  {
-    return Level;
-  }
 
   public Uri GetReparentedValue(TId? oldRoot, TId? newRoot)
   {
@@ -115,15 +150,15 @@ public abstract class RecursiveEntityBase<TId, TEntity> : AuditableEntityBase<TI
   }
 
 
-  //? Gets the next sibling tree node.
-  public TEntity? Next() {
-    int idx = Parent.Children.IndexOf((TEntity)this);
-    if (Parent.Children.Count > idx + 1)
-    {
-      return Parent.Children[idx + 1];
-    }
-    return null;
-  }
+  ////? Gets the next sibling tree node.
+  //public TEntity? Next() {
+  //  int idx = Parent.Children.IndexOf((TEntity)this);
+  //  if (Parent.Children.Count > idx + 1)
+  //  {
+  //    return Parent.Children[idx + 1];
+  //  }
+  //  return null;
+  //}
   #endregion
 
   #region Private Methods

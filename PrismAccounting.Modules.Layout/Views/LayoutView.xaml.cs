@@ -24,6 +24,20 @@ public partial class LayoutView : UserControl
   private ILayoutManager _layoutManager;
   public LayoutView(ILayoutManager layoutManager)
   {
+    Resources.MergedDictionaries.Add(new ResourceDictionary()
+    {
+      Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml")
+    });
+    Resources.MergedDictionaries.Add(new ResourceDictionary()
+    {
+      Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml")
+    }); Resources.MergedDictionaries.Add(new ResourceDictionary()
+    {
+      Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml")
+    }); Resources.MergedDictionaries.Add(new ResourceDictionary()
+    {
+      Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml")
+    });
     InitializeComponent();
     // _layoutManager.Bind(Main);
 
